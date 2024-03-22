@@ -17,7 +17,7 @@ func main() {
 	var localhost = flag.String("localhost", "", "Ip address to use for localhost")
 	flag.Parse()
 
-	if *localhost!="" && strings.Contains(*url, "localhost") {
+	if *localhost != "" && strings.Contains(*url, "localhost") {
 		*url = strings.ReplaceAll(*url, "localhost", *localhost)
 	}
 
@@ -28,9 +28,13 @@ func main() {
 
 	for {
 		res, err := http.Head(*url)
-		fmt.Printf("Response header: %v", res)
-		if err == nil && res.StatusCode == *responseCode {
-			os.Exit(0)
+		if err != nil {
+			fmt.Printf("Request error: %v", err)
+		} else {
+			fmt.Printf("Response header: %v", res)
+			if err == nil && res.StatusCode == *responseCode {
+				os.Exit(0)
+			}
 		}
 		time.Sleep(sleepDuration)
 		elapsed := time.Now().Sub(startTime)
