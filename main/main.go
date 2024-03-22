@@ -17,18 +17,19 @@ func main() {
 	var localhost = flag.String("localhost", "", "Ip address to use for localhost")
 	flag.Parse()
 
+	if *localhost!="" && strings.Contains(*url, "localhost") {
+		*url = strings.ReplaceAll(*url, "localhost", *localhost)
+	}
+
 	fmt.Printf("Polling URL `%s` for response code %d for up to %d ms at %d ms intervals\n", *url, *responseCode, *timeout, *interval)
 	startTime := time.Now()
 	timeoutDuration := time.Duration(*timeout) * time.Millisecond
 	sleepDuration := time.Duration(*interval) * time.Millisecond
 
-	if *localhost!="" && strings.Contains(*url, "localhost") {
-		*url = strings.ReplaceAll(*url, "localhost", *localhost)
-	}
 	for {
 		res, err := http.Head(*url)
+		fmt.Printf("Response header: %v", res)
 		if err == nil && res.StatusCode == *responseCode {
-			fmt.Printf("Response header: %v", res)
 			os.Exit(0)
 		}
 		time.Sleep(sleepDuration)
