@@ -35,7 +35,7 @@ func main() {
 		time.Sleep(sleepDuration)
 		elapsed := time.Now().Sub(startTime)
 		if elapsed > timeoutDuration {
-			fmt.Printf("Timed out\n")
+			fmt.Printf("Timed out (%d ms/%d ms)\n", elapsed, timeoutDuration)
 			os.Exit(1)
 		}
 	}
